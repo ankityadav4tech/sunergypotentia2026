@@ -118,41 +118,6 @@
   font-weight: 300;
 }
 
-/* Desktop Details (Only visible when active) */
-.desktopDetails {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: all 0.5s ease;
-  margin-top: 0;
-}
-
-.activeItem .desktopDetails {
-  max-height: 200px;
-  /* Adjust as needed */
-  opacity: 1;
-  margin-top: 16px;
-}
-
-.itemDescription {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  margin-bottom: 12px;
-}
-
-.itemFocus {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-muted);
-}
-
-.itemFocus strong {
-  color: var(--color-text-primary);
-  margin-right: 6px;
-}
-
 .reinforcement {
   margin-top: 40px;
   font-size: 0.85rem;
@@ -273,18 +238,5 @@
   font-size: 1rem;
   color: var(--color-text-secondary);
   font-style: italic;
-  margin-bottom: 16px;
-}
-
-.mobileDivider {
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 16px 0;
-}
-
-.mobileDescription {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
   margin-bottom: 16px;
 }

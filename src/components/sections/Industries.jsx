@@ -124,14 +124,6 @@ const Industries = () => {
                 >
                   <h3 className={styles.itemTitle}>{item.title}</h3>
                   <p className={styles.itemDescriptor}>{item.tagline}</p>
-
-                  {/* Expanded content for active item (Desktop only) */}
-                  <div className={styles.desktopDetails}>
-                    <p className={styles.itemDescription}>{item.description}</p>
-                    <p className={styles.itemFocus}>
-                      <strong>Focus:</strong> {item.focus}
-                    </p>
-                  </div>
                 </div>
               ))}
             </div>
@@ -175,11 +167,6 @@ const Industries = () => {
                 <div className={styles.mobileContent}>
                   <h3 className={styles.mobileTitle}>{item.title}</h3>
                   <p className={styles.mobileTagline}>{item.tagline}</p>
-                  <hr className={styles.mobileDivider} />
-                  <p className={styles.mobileDescription}>{item.description}</p>
-                  <p className={styles.itemFocus}>
-                    <strong>Focus:</strong> {item.focus}
-                  </p>
                 </div>
               </div>
             ))}
