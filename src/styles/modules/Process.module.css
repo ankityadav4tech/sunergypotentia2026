@@ -1,0 +1,371 @@
+.section {
+  background-color: var(--color-bg-primary);
+  /* Dark Theme */
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.header {
+  text-align: left;
+  margin-bottom: 80px;
+}
+
+.heading {
+  font-size: 2.5rem;
+  color: #fff;
+  /* White */
+  margin-bottom: 1rem;
+}
+
+.subheading {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+.processContainer {
+  position: relative;
+  width: 100%;
+  padding: 40px 0;
+  /* Add visual buffer */
+}
+
+/* Ribbon Track */
+.ribbonTrack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  /* Thinner line for elegance */
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.ribbonFill {
+  height: 100%;
+  background: var(--color-accent);
+  /* Simple accent line */
+  width: 0%;
+  box-shadow: 0 0 10px var(--color-accent);
+}
+
+.stepsWrapper {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  gap: 16px;
+  height: 500px;
+  /* Increased for more space */
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  /* Each step has connector at center, content above or below */
+}
+
+/* Connector Node - positioned relative to processContainer via top calc */
+.connectorNode {
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+
+.connectorArrow {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-bg-secondary);
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.stepNumber {
+  position: absolute;
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  z-index: 3;
+}
+
+/* Zig Zag Logic */
+.flipCard {
+  width: 100%;
+  perspective: 1000px;
+  cursor: pointer;
+  padding: 0 10px;
+  position: relative;
+  z-index: 10;
+  /* No fixed min-height - let content determine */
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1), height 0.3s ease;
+  transform-style: preserve-3d;
+  background: transparent;
+}
+
+.flipCard:hover .flipCardInner {
+  transform: rotateY(180deg);
+}
+
+/* Common Face Styles */
+.cardFront,
+.cardBack {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Front face - static */
+.cardFront {
+  position: relative;
+}
+
+/* Back face - absolute with scroll for overflow */
+.cardBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Constrain to same size as front */
+  transform: rotateY(180deg);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-accent);
+  overflow-y: auto;
+  /* Scroll if content overflows */
+  overflow-x: hidden;
+}
+
+/* Stacking Faces using Grid */
+.flipCardInner {
+  display: grid;
+  grid-template-areas: "inner";
+}
+
+.cardFront,
+.cardBack {
+  grid-area: inner;
+}
+
+/* Front Specific */
+.cardFront {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+/* Arrows */
+.cardFront::after,
+.cardBack::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Step Above (1, 3, 5) -> Arrow at Bottom */
+.stepAbove .cardFront::after,
+.stepAbove .cardBack::after {
+  bottom: -10px;
+  border-top: 10px solid;
+  border-top-color: inherit;
+  /* Matches border or bg? Use border color tricky. */
+  /* To simulate border we need two triangles. Let's just match BG for simplciity and ignore border on arrow for now, or match border color. */
+  border-top-color: var(--color-bg-secondary);
+}
+
+.stepAbove .cardBack::after {
+  border-top-color: var(--color-bg-primary);
+}
+
+/* Step Below (2, 4, 6) -> Arrow at Top */
+.stepBelow .cardFront::after,
+.stepBelow .cardBack::after {
+  top: -10px;
+  border-bottom: 10px solid;
+  border-bottom-color: var(--color-bg-secondary);
+}
+
+.stepBelow .cardBack::after {
+  border-bottom-color: var(--color-bg-primary);
+}
+
+/* Adjust Spacing */
+/* Step Above (1, 3, 5): Cards at top half */
+.stepAbove {
+  justify-content: flex-start;
+}
+
+.stepAbove .flipCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(50% + 35px);
+  /* Stop before center line + half circle */
+  padding: 0 10px;
+  transform-origin: bottom center;
+}
+
+/* Step Below (2, 4, 6): Cards at bottom half */
+.stepBelow {
+  justify-content: flex-end;
+}
+
+.stepBelow .flipCard {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: calc(50% + 35px);
+  /* Start after center line + half circle */
+  padding: 0 10px;
+  transform-origin: top center;
+}
+
+
+.stepTitle {
+  font-size: 1.35rem;
+  /* Increased */
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.stepDesc {
+  font-size: 1rem;
+  /* Increased */
+  color: #94a3b8;
+  /* Slate 400 */
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.bulletList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.bullet {
+  display: flex;
+  gap: 6px;
+  font-size: 0.9rem;
+  /* Increased */
+  color: #cbd5e1;
+  /* Slate 300 */
+  margin-bottom: 4px;
+}
+
+.bulletIcon {
+  color: var(--color-accent);
+  min-width: 12px;
+  margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .ribbonTrack {
+    display: none;
+  }
+
+  .stepsWrapper {
+    flex-direction: column;
+    padding-left: 20px;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    gap: 40px;
+  }
+
+  .step {
+    justify-content: flex-start;
+  }
+
+  .stepAbove,
+  .stepBelow {
+    justify-content: flex-start;
+  }
+
+  .stepAbove .flipCard,
+  .stepBelow .flipCard {
+    margin: 0;
+    padding: 0 0 0 32px;
+    grid-row: auto;
+    /* Reset grid */
+  }
+
+  /* Reset Arrows for Mobile: Point Left */
+  .cardFront::after,
+  .cardBack::after,
+  .stepAbove .cardFront::after,
+  .stepAbove .cardBack::after,
+  .stepBelow .cardFront::after,
+  .stepBelow .cardBack::after {
+    top: 50%;
+    left: -10px;
+    bottom: auto;
+    right: auto;
+    transform: translateY(-50%);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid;
+    border-right-color: var(--color-bg-secondary);
+    border-left: none;
+  }
+
+  .cardBack::after,
+  .stepAbove .cardBack::after,
+  .stepBelow .cardBack::after {
+    border-right-color: var(--color-bg-primary);
+  }
+
+  .connectorNode {
+    left: -24px;
+    top: 0;
+    width: auto;
+    transform: none;
+    position: relative;
+    /* Change flow for mobile */
+    margin-bottom: 16px;
+    display: inline-flex;
+    left: -32px;
+  }
+
+  .connectorArrow {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .stepNumber {
+    font-size: 0.8rem;
+  }
+}

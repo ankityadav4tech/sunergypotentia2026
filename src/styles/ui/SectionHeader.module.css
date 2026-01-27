@@ -1,0 +1,16 @@
+.header {
+  margin-bottom: var(--space-12);
+}
+
+.subtitle {
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  margin-bottom: 0;
+}

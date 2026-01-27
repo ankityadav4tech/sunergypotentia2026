@@ -1,0 +1,212 @@
+.section {
+    background-color: var(--color-bg-primary);
+    /* Dark Slate 900 */
+    padding: 96px 0;
+    position: relative;
+}
+
+/* Header */
+.header {
+    margin-bottom: 64px;
+    max-width: 800px;
+}
+
+.eyebrow {
+    display: block;
+    font-family: var(--font-family-base);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.heading {
+    font-size: 2.5rem;
+    /* ~40px */
+    color: #fff;
+    /* White title */
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.subheading {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    /* Slate 300/400 */
+    line-height: 1.6;
+    max-width: 60%;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 32px;
+}
+
+/* Card */
+.card {
+    grid-column: span 4;
+    background-color: var(--color-bg-secondary);
+    /* Slate 800 */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Subtle border */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    /* Dark shadow */
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Icon */
+.iconWrapper {
+    color: #94a3b8;
+    /* Muted slate */
+    margin-bottom: 24px;
+    transition: color 0.3s ease;
+}
+
+.card:hover .iconWrapper {
+    color: var(--color-accent);
+}
+
+/* Title */
+.cardTitle {
+    font-size: 1.5rem;
+    /* ~24px */
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+/* Value Statement */
+.valueStatement {
+    font-size: 1rem;
+    color: #cbd5e1;
+    /* Light slate text */
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+/* Divider */
+.divider {
+    width: 48px;
+    height: 2px;
+    background-color: var(--color-accent);
+    margin: 24px 0;
+    opacity: 0.8;
+}
+
+/* Bullets */
+.bulletList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+    flex-grow: 1;
+    /* Push CTA to bottom */
+}
+
+.bulletItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.925rem;
+    /* ~14-15px */
+    color: #94a3b8;
+    /* Muted bullet text */
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.bulletDot {
+    min-width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    margin-top: 8px;
+    /* Optical align with text */
+    opacity: 0.8;
+}
+
+/* CTA (Secondary) */
+.ctaWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-accent);
+    /* Link color */
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.ctaWrapper:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.ctaIcon {
+    transition: transform 0.2s;
+}
+
+.ctaWrapper:hover .ctaIcon {
+    transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .subheading {
+        max-width: 100%;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns tablet? Or force stack? Prompt says stack on mobile. Let's do 2 col for tablet for better use of space, or full width cards? */
+        /* "Three equal-width capability cards on desktop" -> "Cards stack vertically on mobile" */
+        /* Let's keep 4 span on 12 grid for desktop. */
+        /* For tablet (medium), span 6 (2 cards) or span 12? */
+    }
+}
+
+@media (max-width: 900px) {
+    .card {
+        grid-column: span 6;
+        /* 2 per row */
+    }
+
+    .card:last-child {
+        grid-column: span 12;
+        /* Center last one or full width */
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 64px 0;
+    }
+
+    .grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .heading {
+        font-size: 2rem;
+    }
+}
