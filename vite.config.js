@@ -4,8 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // This is the key fix for "blank screen" when moving folders
-  base: './', 
+  base: '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
