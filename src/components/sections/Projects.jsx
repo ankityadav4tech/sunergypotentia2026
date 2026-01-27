@@ -5,6 +5,11 @@ import { X, ExternalLink, Download, FileText } from 'lucide-react';
 import Container from '../ui/Container';
 import styles from '../../styles/modules/Projects.module.css';
 
+// Import images
+import imgRooftopJaipur from '../../assets/images/projects/rooftop-jaipur.png';
+import imgGroundTumkur from '../../assets/images/projects/ground-tumkur.png';
+import imgRooftopBangalore from '../../assets/images/projects/rooftop-bangalore.png';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Project Data
@@ -19,7 +24,7 @@ const projectsData = {
       status: 'Operational',
       statusColor: 'green',
       model: 'CAPEX',
-      image: '/images/projects/rooftop-jaipur.png',
+      image: imgRooftopJaipur,
       shortDescription: 'Representative project executed in collaboration with EPC partners — capacity: 1.2 MW.',
       bullets: [
         'Scope: Feasibility · Design · EPC · Commissioning',
@@ -36,7 +41,7 @@ const projectsData = {
       status: 'Operational',
       statusColor: 'green',
       model: 'OPEX',
-      image: '/images/projects/ground-tumkur.png',
+      image: imgGroundTumkur,
       shortDescription: 'Representative project executed in collaboration with EPC partners — capacity: 15 MW.',
       bullets: [
         'Scope: Feasibility · Design · EPC · Commissioning',
@@ -53,7 +58,7 @@ const projectsData = {
       status: 'Operational',
       statusColor: 'green',
       model: 'CAPEX',
-      image: '/images/projects/rooftop-bangalore.png',
+      image: imgRooftopBangalore,
       shortDescription: 'Representative project executed in collaboration with EPC partners — capacity: 1.4 MW.',
       bullets: [
         'Scope: Feasibility · Design · EPC · Commissioning',
@@ -72,7 +77,7 @@ const projectsData = {
       status: 'Under Development',
       statusColor: 'amber',
       model: 'Group Captive',
-      image: '/images/projects/ground-tumkur.png',
+      image: imgGroundTumkur,
       shortDescription: 'Under development — expected commissioning Q3 2026.',
       bullets: [
         'Scope: Survey · Design · Regulatory',
@@ -90,7 +95,7 @@ const projectsData = {
       status: 'Planned',
       statusColor: 'blue',
       model: 'PPA',
-      image: '/images/projects/rooftop-bangalore.png',
+      image: imgRooftopBangalore,
       shortDescription: 'Planned project — subject to regulatory approvals.',
       bullets: [
         'Scope: Feasibility · Pre-development',

@@ -4,6 +4,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from '../../styles/modules/Industries.module.css';
 import Container from '../../styles/ui/Container.module.css';
 
+// Import images
+import imgManufacturing from '../../assets/images/industries/industry_manufacturing.png';
+import imgMsme from '../../assets/images/industries/industry_msme.png';
+import imgHealthcare from '../../assets/images/industries/industry_healthcare.png';
+import imgHospitality from '../../assets/images/industries/industry_hospitality.png';
+import imgEducation from '../../assets/images/industries/industry_education.png';
+import imgDatacenters from '../../assets/images/industries/industry_datacenters.png';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const industriesData = [
@@ -13,7 +21,7 @@ const industriesData = [
     tagline: 'High-load operations with zero tolerance for downtime.',
     description: 'Energy-intensive manufacturing facilities require stable, cost-efficient power to maintain productivity and margins. Our solutions are designed to align with continuous load profiles, shift-based consumption, and long operating hours while reducing long-term energy costs.',
     focus: 'Cost reduction · Load stability · Long-term reliability',
-    image: '/images/industries/industry_manufacturing.png'
+    image: imgManufacturing
   },
   {
     id: 'msme',
@@ -21,7 +29,7 @@ const industriesData = [
     tagline: 'Scalable energy solutions for growing businesses.',
     description: 'MSMEs and industrial clusters need flexible renewable models that reduce energy costs without stressing capital. We design systems that scale with business growth while simplifying approvals, execution, and long-term operations.',
     focus: 'Zero upfront options · Scalability · Ease of execution',
-    image: '/images/industries/industry_msme.png'
+    image: imgMsme
   },
   {
     id: 'healthcare',
@@ -29,7 +37,7 @@ const industriesData = [
     tagline: 'Reliable power for mission-critical environments.',
     description: 'Hospitals and healthcare facilities demand uninterrupted power with strict compliance requirements. Our renewable and hybrid systems are engineered to support critical infrastructure, backed by monitoring and maintenance strategies that prioritize reliability.',
     focus: 'High uptime · Compliance · Backup integration',
-    image: '/images/industries/industry_healthcare.png'
+    image: imgHealthcare
   },
   {
     id: 'hospitality',
@@ -37,7 +45,7 @@ const industriesData = [
     tagline: 'Energy efficiency without compromising guest experience.',
     description: 'Hotels, malls, and commercial complexes operate on variable load patterns and high daytime consumption. Our solutions help reduce operating costs while maintaining comfort, aesthetics, and brand standards.',
     focus: 'Daytime optimization · Cost predictability · Sustainability goals',
-    image: '/images/industries/industry_hospitality.png'
+    image: imgHospitality
   },
   {
     id: 'education',
@@ -45,7 +53,7 @@ const industriesData = [
     tagline: 'Long-term savings for large, distributed campuses.',
     description: 'Educational institutions benefit from predictable energy costs and long asset life. We deliver campus-wide renewable solutions that align with academic schedules, funding models, and sustainability objectives.',
     focus: 'Long-term savings · Campus-wide deployment · Low operational complexity',
-    image: '/images/industries/industry_education.png'
+    image: imgEducation
   },
   {
     id: 'datacenters',
@@ -53,7 +61,7 @@ const industriesData = [
     tagline: 'Power systems built for consistency and scale.',
     description: 'Data centers and logistics facilities require dependable energy to support digital and supply-chain operations. Our hybrid and storage-integrated solutions help manage peak demand, improve reliability, and support expansion plans.',
     focus: 'Consistent supply · Peak management · Future-ready infrastructure',
-    image: '/images/industries/industry_datacenters.png'
+    image: imgDatacenters
   }
 ];
 
