@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { Phone, Mail, MapPin, Sun } from 'lucide-react';
+import { Phone, Mail, MapPin, Sun, Menu, X } from 'lucide-react';
 import Container from '../ui/Container';
 import Button from '../ui/Button';
 import styles from '../../styles/modules/Hero.module.css';
@@ -41,6 +41,7 @@ const slides = [
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const slideRefs = useRef([]);
   const textRefs = useRef([]);         // Headline
@@ -65,6 +66,8 @@ const Hero = () => {
   // GSAP Transition
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
       // 1. Image Fade
       slides.forEach((_, i) => {
         gsap.to(slideRefs.current[i], {
@@ -77,14 +80,14 @@ const Hero = () => {
 
       // 2. Text Fade Up (Headline)
       gsap.fromTo(textRefs.current[currentSlide],
-        { y: 30, autoAlpha: 0 },
+        { y: isMobile ? 0 : 30, autoAlpha: 0 },
         { y: 0, autoAlpha: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 } // Reduced delay to 0.2s
       );
 
       // 3. Card Animations Matches below logic
       // Animate "Our Expertise" Title
       gsap.fromTo(expertiseTitleRefs.current[currentSlide],
-        { y: 20, autoAlpha: 0 },
+        { y: isMobile ? 0 : 20, autoAlpha: 0 },
         { y: 0, autoAlpha: 1, duration: 0.6, ease: 'power3.out', delay: 0.3 } // Matches closely with headline
       );
 
@@ -94,7 +97,7 @@ const Hero = () => {
       if (currentListEl) {
         const lis = currentListEl.querySelectorAll('li');
         gsap.fromTo(lis,
-          { x: -10, autoAlpha: 0 },
+          { x: isMobile ? 0 : -10, autoAlpha: 0 },
           { x: 0, autoAlpha: 1, duration: 0.5, stagger: 0.1, delay: 0.35 } // Start shortly after title
         );
       }
@@ -102,6 +105,20 @@ const Hero = () => {
     });
     return () => ctx.revert();
   }, [currentSlide]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <section className={styles.hero}>
@@ -143,12 +160,66 @@ const Hero = () => {
                 color: 'var(--color-accent)', // Fixed contrast issue
                 padding: '0.4rem 1rem'
               }}
+              className={styles.desktopConnectBtn}
+            >
+              Connect with Us
+            </Button>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              className={styles.mobileMenuToggle}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? <X size={24} color="#fff" /> : <Menu size={24} color="#fff" />}
+            </button>
+          </div>
+        </Container>
+      </nav>
+
+      {/* Mobile Menu Drawer */}
+      <div className={`${styles.mobileMenuDrawer} ${mobileMenuOpen ? styles.open : ''}`}>
+        <button
+          className={styles.closeMenuBtn}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        >
+          <X size={32} color="#fff" />
+        </button>
+        <div className={styles.mobileMenuContent}>
+          <ul className={styles.mobileNavLinks}>
+            <li><a href="#projects" onClick={() => setMobileMenuOpen(false)}>Projects</a></li>
+            <li><a href="#domains" onClick={() => setMobileMenuOpen(false)}>Domains</a></li>
+            <li><a href="#experience" onClick={() => setMobileMenuOpen(false)}>Experience</a></li>
+            <li><a href="#connections" onClick={() => setMobileMenuOpen(false)}>Connections</a></li>
+          </ul>
+
+          <div className={styles.mobileInfoSection}>
+            <div className={styles.mobileInfoItem}>
+              <Phone size={16} className={styles.icon} />
+              <span>916692xxxx</span>
+            </div>
+            <div className={styles.mobileInfoItem}>
+              <Mail size={16} className={styles.icon} />
+              <span>info@sunergypotentia.com</span>
+            </div>
+            <div className={styles.mobileInfoItem}>
+              <MapPin size={16} className={styles.icon} />
+              <span>Pratap Nagar, Jaipur, Rajasthan, India</span>
+            </div>
+            <Button
+              variant="primary"
+              style={{
+                marginTop: '1.5rem',
+                width: '100%',
+                justifyContent: 'center'
+              }}
             >
               Connect with Us
             </Button>
           </div>
-        </Container>
-      </nav>
+        </div>
+      </div>
 
       {/* 3. Slider */}
       <div className={styles.sliderContainer}>
@@ -164,10 +235,7 @@ const Hero = () => {
 
             <Container style={{ height: '100%', position: 'relative' }}>
               {/* Headline Area */}
-              <div
-                className={styles.mainTextContent}
-                style={{ position: 'absolute', top: '25%', left: '1rem', right: '1rem' }}
-              >
+              <div className={styles.mainTextContent}>
                 <h1 className={styles.headline} ref={el => textRefs.current[index] = el}>
                   {slide.headline}
                 </h1>

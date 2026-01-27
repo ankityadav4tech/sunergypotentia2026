@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import Container from '../ui/Container';
 import styles from '../../styles/modules/Process.module.css';
 
@@ -88,6 +88,34 @@ const Process = () => {
   const ribbonRef = useRef(null);
   const headerRef = useRef(null);
 
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStep, setSelectedStep] = useState(null);
+
+  // Handle card click
+  const handleCardClick = (step) => {
+    setSelectedStep(step);
+    setIsModalOpen(true);
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedStep(null);
+  };
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Header Animation (Left to Right)
@@ -124,7 +152,7 @@ const Process = () => {
 
       // Animate steps Content (Text Fields)
       stepsRef.current.forEach((el, index) => {
-        const content = el.querySelector(`.${styles.flipCard}`);
+        const content = el.querySelector(`.${styles.card}`);
         const connector = el.querySelector(`.${styles.connectorNode}`);
 
         // Node pop in
@@ -192,36 +220,55 @@ const Process = () => {
                   <div className={styles.connectorArrow} />
                 </div>
 
-                {/* Flip Card Wrapper */}
-                <div className={styles.flipCard}>
-                  <div className={styles.flipCardInner}>
-
-                    {/* Front Face: Title + Description */}
-                    <div className={styles.cardFront}>
-                      <h3 className={styles.stepTitle}>{step.title}</h3>
-                      <p className={styles.stepDesc}>{step.description}</p>
-                      {/* Visual hint for interaction maybe? */}
-                    </div>
-
-                    {/* Back Face: Bullets */}
-                    <div className={styles.cardBack}>
-                      <ul className={styles.bulletList}>
-                        {step.bullets.map((bullet, i) => (
-                          <li key={i} className={styles.bullet}>
-                            <Check size={12} className={styles.bulletIcon} />
-                            {bullet}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                  </div>
+                {/* Clickable Card (no flip) */}
+                <div
+                  className={styles.card}
+                  onClick={() => handleCardClick(step)}
+                >
+                  <h3 className={styles.stepTitle}>{step.title}</h3>
+                  <p className={styles.stepDesc}>{step.description}</p>
+                  <span className={styles.clickHint}>Click for details</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </Container>
+
+      {/* Modal */}
+      {isModalOpen && selectedStep && (
+        <div className={styles.modalOverlay} onClick={handleCloseModal}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={handleCloseModal} aria-label="Close modal">
+              <X size={24} />
+            </button>
+
+            <div className={styles.modalHeader}>
+              <div className={styles.modalStepNumber}>0{selectedStep.id}</div>
+              <h3 className={styles.modalTitle}>{selectedStep.title}</h3>
+            </div>
+
+            <p className={styles.modalDescription}>{selectedStep.description}</p>
+
+            <div className={styles.modalBullets}>
+              <h4 className={styles.modalSubheading}>Key Activities</h4>
+              <ul className={styles.bulletList}>
+                {selectedStep.bullets.map((bullet, i) => (
+                  <li key={i} className={styles.bullet}>
+                    <Check size={14} className={styles.bulletIcon} />
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.modalOutcome}>
+              <h4 className={styles.modalSubheading}>Outcome</h4>
+              <p>{selectedStep.outcome}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

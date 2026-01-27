@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sun, Wind, Battery, ArrowRight } from 'lucide-react';
+import { Sun, Wind, Battery, ArrowRight, X } from 'lucide-react';
 import Container from '../ui/Container';
 import styles from '../../styles/modules/Credibility.module.css';
 
@@ -53,6 +53,43 @@ const Credibility = () => { // Implementing "What We Do" section here
     const sectionRef = useRef(null);
     const cardsRef = useRef([]);
     const headerRef = useRef(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedCapability, setSelectedCapability] = useState(null);
+
+    // Handle card click to open modal
+    const handleCardClick = (capability) => {
+        setSelectedCapability(capability);
+        setModalOpen(true);
+    };
+
+    // Handle modal close
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
+    // Handle Escape key to close modal
+    useEffect(() => {
+        const handleEscape = (e) => {
+            if (e.key === 'Escape' && modalOpen) {
+                handleCloseModal();
+            }
+        };
+
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, [modalOpen]);
+
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (modalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [modalOpen]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -117,6 +154,7 @@ const Credibility = () => { // Implementing "What We Do" section here
                             key={item.id}
                             className={styles.card}
                             ref={el => cardsRef.current[index] = el}
+                            onClick={() => handleCardClick(item)}
                         >
                             <div className={styles.iconWrapper}>
                                 {item.icon}
@@ -125,24 +163,41 @@ const Credibility = () => { // Implementing "What We Do" section here
                             <h3 className={styles.cardTitle}>{item.title}</h3>
                             <p className={styles.valueStatement}>{item.value}</p>
 
-                            <div className={styles.divider} />
-
-                            <ul className={styles.bulletList}>
-                                {item.bullets.map((bullet, i) => (
-                                    <li key={i} className={styles.bulletItem}>
-                                        <span className={styles.bulletDot} />
-                                        {bullet}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <div className={styles.ctaWrapper}>
-                                <span className={styles.ctaText}>Learn More</span>
-                                <ArrowRight size={16} className={styles.ctaIcon} />
-                            </div>
+                            <div className={styles.cardHint}>Click to learn more</div>
                         </div>
                     ))}
                 </div>
+
+                {/* Modal */}
+                {modalOpen && selectedCapability && (
+                    <div className={styles.modalOverlay} onClick={handleCloseModal}>
+                        <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
+                            <button className={styles.closeButton} onClick={handleCloseModal} aria-label="Close modal">
+                                <X size={24} />
+                            </button>
+
+                            <div className={styles.modalContent}>
+                                <div className={styles.modalIconWrapper}>
+                                    {selectedCapability.icon}
+                                </div>
+
+                                <h3 className={styles.modalTitle}>{selectedCapability.title}</h3>
+                                <p className={styles.modalValue}>{selectedCapability.value}</p>
+
+                                <div className={styles.modalDivider} />
+
+                                <ul className={styles.modalBulletList}>
+                                    {selectedCapability.bullets.map((bullet, i) => (
+                                        <li key={i} className={styles.modalBulletItem}>
+                                            <span className={styles.modalBulletDot} />
+                                            {bullet}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </Container>
         </section>
     );

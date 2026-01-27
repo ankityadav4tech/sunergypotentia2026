@@ -101,87 +101,42 @@
   z-index: 3;
 }
 
-/* Zig Zag Logic */
-.flipCard {
+/* Simple Card (no flip) */
+.card {
   width: 100%;
-  perspective: 1000px;
   cursor: pointer;
   padding: 0 10px;
   position: relative;
   z-index: 10;
-  /* No fixed min-height - let content determine */
-}
-
-.flipCardInner {
-  position: relative;
-  width: 100%;
-  text-align: left;
-  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1), height 0.3s ease;
-  transform-style: preserve-3d;
-  background: transparent;
-}
-
-.flipCard:hover .flipCardInner {
-  transform: rotateY(180deg);
-}
-
-/* Common Face Styles */
-.cardFront,
-.cardBack {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   background-color: var(--color-bg-secondary);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 14px;
+  padding: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-/* Front face - static */
-.cardFront {
-  position: relative;
-}
-
-/* Back face - absolute with scroll for overflow */
-.cardBack {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* Constrain to same size as front */
-  transform: rotateY(180deg);
-  background-color: var(--color-bg-primary);
+.card:hover {
   border-color: var(--color-accent);
-  overflow-y: auto;
-  /* Scroll if content overflows */
-  overflow-x: hidden;
+  box-shadow: 0 6px 12px rgba(56, 189, 248, 0.2);
+  transform: translateY(-2px);
 }
 
-/* Stacking Faces using Grid */
-.flipCardInner {
-  display: grid;
-  grid-template-areas: "inner";
-}
-
-.cardFront,
-.cardBack {
-  grid-area: inner;
-}
-
-/* Front Specific */
-.cardFront {
-  z-index: 2;
-  transform: rotateY(0deg);
+.clickHint {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  margin-top: 8px;
+  opacity: 0.7;
+  font-style: italic;
 }
 
 /* Arrows */
-.cardFront::after,
-.cardBack::after {
+.card::after {
   content: '';
   position: absolute;
   width: 0;
@@ -193,30 +148,15 @@
 }
 
 /* Step Above (1, 3, 5) -> Arrow at Bottom */
-.stepAbove .cardFront::after,
-.stepAbove .cardBack::after {
+.stepAbove .card::after {
   bottom: -10px;
-  border-top: 10px solid;
-  border-top-color: inherit;
-  /* Matches border or bg? Use border color tricky. */
-  /* To simulate border we need two triangles. Let's just match BG for simplciity and ignore border on arrow for now, or match border color. */
-  border-top-color: var(--color-bg-secondary);
-}
-
-.stepAbove .cardBack::after {
-  border-top-color: var(--color-bg-primary);
+  border-top: 10px solid var(--color-bg-secondary);
 }
 
 /* Step Below (2, 4, 6) -> Arrow at Top */
-.stepBelow .cardFront::after,
-.stepBelow .cardBack::after {
+.stepBelow .card::after {
   top: -10px;
-  border-bottom: 10px solid;
-  border-bottom-color: var(--color-bg-secondary);
-}
-
-.stepBelow .cardBack::after {
-  border-bottom-color: var(--color-bg-primary);
+  border-bottom: 10px solid var(--color-bg-secondary);
 }
 
 /* Adjust Spacing */
@@ -225,15 +165,14 @@
   justify-content: flex-start;
 }
 
-.stepAbove .flipCard {
+.stepAbove .card {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: calc(50% + 35px);
-  /* Stop before center line + half circle */
   padding: 0 10px;
-  transform-origin: bottom center;
+  box-sizing: border-box;
 }
 
 /* Step Below (2, 4, 6): Cards at bottom half */
@@ -241,15 +180,14 @@
   justify-content: flex-end;
 }
 
-.stepBelow .flipCard {
+.stepBelow .card {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   top: calc(50% + 35px);
-  /* Start after center line + half circle */
   padding: 0 10px;
-  transform-origin: top center;
+  box-sizing: border-box;
 }
 
 
@@ -303,6 +241,7 @@
     padding-left: 20px;
     border-left: 2px solid rgba(255, 255, 255, 0.1);
     gap: 40px;
+    height: auto;
   }
 
   .step {
@@ -314,21 +253,23 @@
     justify-content: flex-start;
   }
 
-  .stepAbove .flipCard,
-  .stepBelow .flipCard {
+  .stepAbove .card,
+  .stepBelow .card {
     margin: 0;
-    padding: 0 0 0 32px;
-    grid-row: auto;
-    /* Reset grid */
+    padding: 16px !important;
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Reset Arrows for Mobile: Point Left */
-  .cardFront::after,
-  .cardBack::after,
-  .stepAbove .cardFront::after,
-  .stepAbove .cardBack::after,
-  .stepBelow .cardFront::after,
-  .stepBelow .cardBack::after {
+  .card::after,
+  .stepAbove .card::after,
+  .stepBelow .card::after {
     top: 50%;
     left: -10px;
     bottom: auto;
@@ -336,15 +277,8 @@
     transform: translateY(-50%);
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-right: 10px solid;
-    border-right-color: var(--color-bg-secondary);
+    border-right: 10px solid var(--color-bg-secondary);
     border-left: none;
-  }
-
-  .cardBack::after,
-  .stepAbove .cardBack::after,
-  .stepBelow .cardBack::after {
-    border-right-color: var(--color-bg-primary);
   }
 
   .connectorNode {
@@ -367,5 +301,160 @@
 
   .stepNumber {
     font-size: 0.8rem;
+  }
+
+  .step {
+    position: relative;
+    height: auto;
+  }
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modalContent {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modalClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.modalClose:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-accent);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-right: 40px;
+}
+
+.modalStepNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-family: var(--font-family-heading);
+}
+
+.modalTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  flex: 1;
+}
+
+.modalDescription {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.modalBullets,
+.modalOutcome {
+  margin-bottom: 24px;
+}
+
+.modalSubheading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modalOutcome p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  font-style: italic;
+  padding-left: 16px;
+  border-left: 3px solid var(--color-accent);
+}
+
+/* Mobile adjustments for modal */
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 24px;
+    max-height: 85vh;
+  }
+
+  .modalTitle {
+    font-size: 1.4rem;
+  }
+
+  .modalDescription {
+    font-size: 1rem;
+  }
+
+  .modalHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }

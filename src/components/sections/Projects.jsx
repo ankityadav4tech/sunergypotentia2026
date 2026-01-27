@@ -140,6 +140,20 @@ const Projects = () => {
   const openModal = (project) => setSelectedProject(project);
   const closeModal = () => setSelectedProject(null);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject]);
+
   return (
     <section className={styles.section} ref={sectionRef} id="projects">
       <Container>
